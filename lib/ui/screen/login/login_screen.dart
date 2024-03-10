@@ -6,6 +6,7 @@ import 'package:tripsync_v3/ui/common_widget/main_button.dart';
 import 'package:tripsync_v3/ui/common_widget/trip_scaffold.dart';
 import 'package:tripsync_v3/ui/common_widget/trip_scaffold_without_appbar.dart';
 import 'package:tripsync_v3/ui/controller/loginController.dart';
+import 'package:tripsync_v3/ui/screen/home/homepage.dart';
 import 'package:tripsync_v3/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -158,6 +159,7 @@ class LoginScreen extends StatelessWidget {
                         passwordController.text,
                         prefix
                       );
+                      
                     }
                   }, 
                   titleText: AppLocalizations.of(context)!.buttonEnter

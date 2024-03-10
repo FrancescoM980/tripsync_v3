@@ -17,7 +17,6 @@ class LoginController extends GetxController {
         phone: phone.replaceAll('+', ''),
         password: password,
       );
-
       if (response.user != null) {
         final res =  await TripUtils.supabase.rpc('get_user_by_phone', params: {'phoneinput': phone.replaceFirst(prefix, '')});
         UserModel? user = res.isNotEmpty ? UserModel.fromMap(res[0]) : null;
@@ -46,15 +45,23 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> saveAutologin(String phone, String password, String prefix) async {
+  Future<bool> saveAutologin(String phone, String password, String prefix) async {
     isLoadingLogin.value = true;
-    await loginWithSupabase(phone, password, prefix);
+    bool success = false;
+    success = await loginWithSupabase(phone, password, prefix);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     await prefs.setString('phone', phone);
     await prefs.setString('password', password);
     await prefs.setString('prefix', prefix);
     isLoadingLogin.value = false;
+    if (success) {
+      Get.off(HomePageScreen());
+    } else {
+      
+    }
+    return success;
+    
   }
 
   Future<String> autoLogin() async {
@@ -78,17 +85,14 @@ class LoginController extends GetxController {
         '{"access_token": ${TripUtils.supabase.auth.currentSession?.accessToken}}'
       );
       if (response.session != null) {
-        // User is logged in
         return 'success';
       } else {
-        // User is not logged in or session has expired
         return 'error';
       }
     } else {
       return 'error';
     }
   } catch (error) {
-    // Handle any errors that occur during the session recovery process
     return 'error';
   }
 }

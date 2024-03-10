@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:tripsync_v3/ui/controller/groupController.dart';
 import 'package:tripsync_v3/ui/controller/loginController.dart';
 import 'package:tripsync_v3/ui/screen/home/homepage.dart';
 import 'package:tripsync_v3/ui/screen/login/login_screen.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         theme: TripUtils.lightTheme,
         darkTheme: TripUtils.darkTheme,
         home: FutureBuilder(
-          future: loginController.autoLogin(),
+          future: autoLogin(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             print(snapshot.data);
             if (snapshot.hasData) {
@@ -55,6 +56,11 @@ class MyApp extends StatelessWidget {
         )
       ),
     );
+  }
+  Future<String> autoLogin() async {
+    String tmp = await loginController.autoLogin();
+    //groupController.fetchMyGroups();
+    return tmp;
   }
 }
 

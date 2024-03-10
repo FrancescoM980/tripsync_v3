@@ -16,7 +16,7 @@ class TripUtils {
   //LightTheme
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: arancione, 
+    primaryColor: purpleChiaro, 
     scaffoldBackgroundColor: grigioScuro,
     colorScheme: ColorScheme.dark(
       primary: arancione, 
@@ -44,7 +44,7 @@ class TripUtils {
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: arancione, 
+    primaryColor: purple, 
     scaffoldBackgroundColor: purpleChiaro, 
     colorScheme: ColorScheme.light(
       primary: arancione, 
