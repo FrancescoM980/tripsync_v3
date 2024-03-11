@@ -1,6 +1,7 @@
 import 'package:bottom_bar_matu/utils/app_utils.dart';
 import 'package:get/get.dart';
 import 'package:tripsync_v3/ui/controller/loginController.dart';
+import 'package:tripsync_v3/ui/model/chat.dart';
 import 'package:tripsync_v3/ui/model/group.dart';
 import 'package:tripsync_v3/utils.dart';
 

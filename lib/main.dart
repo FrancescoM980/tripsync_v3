@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       child: GetMaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
+        locale: Locale('it', 'IT'),
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.dark,
         theme: TripUtils.lightTheme,
@@ -58,7 +59,10 @@ class MyApp extends StatelessWidget {
     );
   }
   Future<String> autoLogin() async {
+    
     String tmp = await loginController.autoLogin();
+    GroupController groupController = Get.put(GroupController());
+    await groupController.fetchMyGroups();
     //groupController.fetchMyGroups();
     return tmp;
   }

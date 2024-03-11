@@ -1,4 +1,5 @@
 import 'package:bottom_bar_matu/bottom_bar_matu.dart';
+import 'package:clean_calendar/clean_calendar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,19 +7,36 @@ import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:tripsync_v3/ui/common_widget/obx_body.dart';
 import 'package:tripsync_v3/ui/common_widget/trip_scaffold.dart';
+import 'package:tripsync_v3/ui/controller/calendarController.dart';
+import 'package:tripsync_v3/ui/controller/chatController.dart';
 import 'package:tripsync_v3/ui/controller/groupController.dart';
 import 'package:tripsync_v3/ui/controller/homeController.dart';
+import 'package:tripsync_v3/ui/controller/walletController.dart';
 import 'package:tripsync_v3/ui/model/chat.dart';
 import 'package:tripsync_v3/ui/model/group.dart';
 import 'package:tripsync_v3/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePageScreen extends StatelessWidget {
-  GroupController groupController = Get.put(GroupController());
+  GroupController groupController = Get.find<GroupController>();
+  CalendarController calendarController = Get.put(CalendarController());
+  WalletController walletController = Get.put(WalletController());
+  ChatController chatController = Get.put(ChatController());
+  RxBool isNewMessage = false.obs;
+
+  void startAnimation() async {
+    isNewMessage.value = true;
+    chatController.update();
+    await Future.delayed(Duration(seconds: 2), () {
+      isNewMessage.value = false;
+    });
+    chatController.update();
+  }
   HomePageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    walletController.getDebt();
     return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) {
@@ -65,8 +83,12 @@ class HomePageScreen extends StatelessWidget {
             ],
           ), 
           bottomNavigationBar: StreamBuilder<List<Chat>>(
-            stream: controller.messagesStream,
+            stream: chatController.messagesStream,
             builder: (BuildContext context, snapshot) {
+              chatController.getMyLast();
+              if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+                startAnimation();
+              }
               return BottomBarDoubleBullet(
                 height: 90,
                 color: Theme.of(context).primaryColor,
@@ -89,13 +111,44 @@ class HomePageScreen extends StatelessWidget {
                     iconData: Iconsax.calendar
                   ),
                   BottomBarItem(
-                    iconData: CupertinoIcons.chat_bubble_2_fill
+                    iconBuilder: (color) {
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Stack(
+                            children: [
+                              
+                              Icon(
+                                CupertinoIcons.chat_bubble_2_fill,
+                                size: 30,
+                                color: controller.currentIndex.value == 4
+                                 ? Theme.of(context).primaryColor
+                                 : Theme.of(context).dividerColor.withOpacity(0.50)
+                              ),
+                              Obx( () => chatController.myLastChat.where((p0) => p0.isMine == true).toList().isEmpty
+                                ? SizedBox(height: 0, width: 0)
+                                : Container(
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    '${chatController.myLastChat.where((p0) => p0.isMine == true).toList().length}',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold
+                                    )
+                                  )
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
                 onSelect: (index) {
                   controller.currentIndex.value = index;
                   controller.update();
                 },
+                
               ); 
             }
           )
@@ -113,7 +166,7 @@ class HomePageScreen extends StatelessWidget {
       case 2:
         return BodyHomePage();
       case 3:
-        return BodyHomePage();
+        return BodyCalendar();
       case 4:
         return BodyHomePage();
       default:
@@ -238,7 +291,8 @@ class BodyHomePage extends StatelessWidget {
 
 
 class BodyWallet extends StatelessWidget {
-  const BodyWallet({super.key});
+  WalletController walletController = Get.find<WalletController>();
+  BodyWallet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -267,15 +321,16 @@ class BodyWallet extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: false,
-              itemCount: 15,
+              itemCount: walletController.debitors.length,
               itemBuilder: (context, i) {
+                Debitor debitor = walletController.debitors[i];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 5.0),
                   child: ListTile(
                     onTap: () {
                       
                     },
-                    title: Text('pippo'),
+                    title: Text(debitor.nicknameDebitor),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -283,7 +338,7 @@ class BodyWallet extends StatelessWidget {
                           'devi dare',
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
-                        Text('22,51')
+                        Text('${debitor.valueDebt}')
                       ],
                     ),
                     leading: CircleAvatar(
@@ -298,6 +353,67 @@ class BodyWallet extends StatelessWidget {
                 );
               }
             ),
+          ),
+        ],
+      )
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class BodyCalendar extends StatelessWidget {
+  CalendarController calendarController = Get.find<CalendarController>();
+  List<DateTime> selectedDates = [];
+  BodyCalendar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CleanCalendar(
+            datePickerCalendarView: DatePickerCalendarView.monthView,
+            enableDenseViewForDates: false,
+            enableDenseSplashForDates: true,
+            streakDatesProperties: DatesProperties(
+              datesDecoration: DatesDecoration(
+                datesBackgroundColor: Colors.red
+              )
+            ),
+            leadingTrailingDatesProperties: DatesProperties(
+              hide: true,
+            ),
+            startWeekday: WeekDay.monday,
+            datesForStreaks: calendarController.dateOccupate + calendarController.dateProvvisorie,
+            dateSelectionMode: DatePickerSelectionMode.singleOrMultiple,
+            onCalendarViewDate: (DateTime calendarViewDate) {
+              print(calendarViewDate);
+            },
+            selectedDates: selectedDates,
+            onSelectedDates: (List<DateTime> value) {
+                if (selectedDates.contains(value.first)) {
+                  selectedDates.remove(value.first);
+                } else {
+                  selectedDates.add(value.first);
+                }
+            },
           ),
         ],
       )
