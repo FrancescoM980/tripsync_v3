@@ -8,5 +8,12 @@
     "clickHere": "CLICCA QUI",
     "dontHaveAccount": "Non hai un account?",
     "register": "REGISTRATI",
-    "partecipanti": "partecipanti"
+    "partecipanti": "partecipanti",
+    "textTheme": "Tema scuro",
+    "textGeneralNotification": "Notifiche generali",
+    "textSendError": "manda segnalazione",
+    "textPrivacyPolicy": "Privacy Policy",
+    "textTermsAndCondition": "Termini & Condizioni",
+    "textLogout": "LOGOUT",
+    "textDeleteAccount": "Elimina il tuo Account"
 }

@@ -8,6 +8,7 @@ import 'package:tripsync_v3/utils.dart';
 class ChatController extends GetxController {
   LoginController loginController = Get.find<LoginController>();
   GroupController groupController = Get.find<GroupController>();
+  RxBool isLoadingMyLastChat = false.obs;
   RxList<Chat> myLastChat = <Chat>[].obs;
   late final Stream<List<Chat>> messagesStream;
   
@@ -32,12 +33,13 @@ class ChatController extends GetxController {
   }
 
   Future<void> getMyLast() async {
+    print('start');
     List<Chat> chats = await getLastMessageForGroups(groupController.myGroups);
     
     // Ordinamento delle chat in base a 'created_at' in ordine decrescente
     chats.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     myLastChat.value = chats;
-    update();
+    print('finish');
   }
 
   Future<List<Chat>> getLastMessageForGroups(List<Group> groups) async {

@@ -13,7 +13,7 @@ class CalendarController extends GetxController {
 
   @override
   void onInit() {
-    fetchMyCalendar();
+    //fetchMyCalendar();
   }
 
 

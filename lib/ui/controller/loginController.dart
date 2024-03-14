@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,14 +33,25 @@ class LoginController extends GetxController {
             );
             currentUser.pathImage = urlImage;
           }
-          
+          success = true;
+        } else {
+          Get.dialog(
+            AlertDialog(
+              title: Text('user not feund'),
+            )
+          );
         }
-        success = true;
+        
       }
       return success;
 
     } catch (error) {
       success = false;
+      Get.dialog(
+        AlertDialog(
+          title: Text('$error'),
+        )
+      );
       print(error);
       return success;
     }
@@ -48,19 +60,33 @@ class LoginController extends GetxController {
   Future<bool> saveAutologin(String phone, String password, String prefix) async {
     isLoadingLogin.value = true;
     bool success = false;
-    success = await loginWithSupabase(phone, password, prefix);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    await prefs.setString('phone', phone);
-    await prefs.setString('password', password);
-    await prefs.setString('prefix', prefix);
-    isLoadingLogin.value = false;
-    if (success) {
-      Get.off(HomePageScreen());
-    } else {
-      
+    try {
+          success = await loginWithSupabase(phone, password, prefix);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.clear();
+          await prefs.setString('phone', phone);
+          await prefs.setString('password', password);
+          await prefs.setString('prefix', prefix);
+          isLoadingLogin.value = false;
+          if (success) {
+            Get.off(HomePageScreen());
+          } else {
+            Get.dialog(
+              AlertDialog(
+                title: Text('Ops, qualcosa è andato stuart'),
+              )
+            );
+          }
+          return success;
+    } catch (e) {
+      Get.dialog(
+        AlertDialog(
+          title: Text('$e'),
+        )
+      );
+      return success;
     }
-    return success;
+
     
   }
 
