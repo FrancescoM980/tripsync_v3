@@ -105,22 +105,52 @@ class LoginController extends GetxController {
   }
 
   Future<String> checkLoginStatus() async {
-  try {
-    if (TripUtils.supabase.auth.currentSession?.accessToken != null) {
-      final response = await TripUtils.supabase.auth.recoverSession(
-        '{"access_token": ${TripUtils.supabase.auth.currentSession?.accessToken}}'
-      );
-      if (response.session != null) {
-        return 'success';
+    try {
+      if (TripUtils.supabase.auth.currentSession?.accessToken != null) {
+        final response = await TripUtils.supabase.auth.recoverSession(
+          '{"access_token": ${TripUtils.supabase.auth.currentSession?.accessToken}}'
+        );
+        if (response.session != null) {
+          return 'success';
+        } else {
+          return 'error';
+        }
       } else {
         return 'error';
       }
-    } else {
+    } catch (error) {
       return 'error';
     }
-  } catch (error) {
-    return 'error';
   }
-}
+
+  Future<void> deleteUserFromDb() async {
+    //isLoadingDeleteUser.value = true;
+    //final String url = 'https://imsudryomiffczemzekx.supabase.co/auth/v1/admin/users/${TripUtils.supabase.auth.currentUser?.id ?? ''}';
+    //final response = await http.delete(
+    //  Uri.parse(url),
+    //  headers: {
+    //    'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imltc3VkcnlvbWlmZmN6ZW16ZWt4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDA0MTgyNDksImV4cCI6MjAxNTk5NDI0OX0.LtxJ3yfF44h4hxP-3vTwHRyyT8wL8Jt4Im-zsZAONF4',
+    //    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imltc3VkcnlvbWlmZmN6ZW16ZWt4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwMDQxODI0OSwiZXhwIjoyMDE1OTk0MjQ5fQ.prOE1Mvf1EhVEurkbkI2EHZnuoaeMgbphppeOiDvAlE',
+    //    'Content-Type': 'application/json',
+    //  },
+    //);
+    //if (response.statusCode == 200) {
+    //  ResponseBody ress = await RemoteService.updateDataToTable(
+    //    'userdata', 
+    //    {
+    //      'is_active': false
+    //    }, 
+    //    {
+    //      'id': currentUser.id
+    //    }
+    //  );
+    //  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    //  sharedPreferences.clear();
+    //  isLoadingDeleteUser.value = false;
+    //  Get.off(Login());
+    //} else {
+    //  isLoadingDeleteUser.value = false;
+    //}
+  }
 
 }

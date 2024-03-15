@@ -7,6 +7,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:timeago/timeago.dart';
 import 'package:tripsync_v3/ui/common_widget/common_form_field.dart';
+import 'package:tripsync_v3/ui/common_widget/loading_widget.dart';
 import 'package:tripsync_v3/ui/common_widget/obx_body.dart';
 import 'package:tripsync_v3/ui/common_widget/trip_scaffold.dart';
 import 'package:tripsync_v3/ui/controller/calendarController.dart';
@@ -73,22 +74,7 @@ class BodyHomePage extends StatelessWidget {
                     color: Colors.transparent
                   ),
                   if (groupController.isLoadingFetchMyGroups.value)
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width/1,
-                    height: MediaQuery.of(context).size.height/1.25,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        LoadingAnimationWidget.inkDrop(
-                          color: Theme.of(context).primaryColor, 
-                          size: 30
-                        ),
-                        SizedBox(height: 15),
-                        Text(AppLocalizations.of(context)!.loadingText)
-                      ],
-                    ),
-                  )
+                  LoadingWidget()
                 ],
               ),
             );

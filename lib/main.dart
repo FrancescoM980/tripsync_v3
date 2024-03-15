@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart';
+import 'package:tripsync_v3/ui/common_widget/loading_widget.dart';
 import 'package:tripsync_v3/ui/controller/groupController.dart';
 import 'package:tripsync_v3/ui/controller/loginController.dart';
 import 'package:tripsync_v3/ui/screen/home/homepage.dart';
@@ -135,21 +136,7 @@ class FirstScreen extends StatelessWidget {
       builder: (controller) {
         
         return Scaffold(
-          body: SizedBox(
-            width: MediaQuery.of(context).size.width/1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                LoadingAnimationWidget.inkDrop(
-                  color: Theme.of(context).primaryColor, 
-                  size: 30
-                ),
-                SizedBox(height: 15),
-                Text(AppLocalizations.of(context)!.loadingText)
-              ],
-            ),
-          )
+          body: LoadingWidget()
         );
       },
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:tripsync_v3/ui/common_widget/loading_widget.dart';
 
 class ObxBody extends StatelessWidget {
   Widget body;
@@ -25,22 +26,7 @@ class ObxBody extends StatelessWidget {
             color: Theme.of(context).dividerColor.withOpacity(0.0)
           ),
           if (loadingBool.any((element) => element.value))
-          SizedBox(
-            width: MediaQuery.of(context).size.width/1,
-            height: MediaQuery.of(context).size.height/1.25,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                LoadingAnimationWidget.inkDrop(
-                  color: Theme.of(context).primaryColor, 
-                  size: 30
-                ),
-                SizedBox(height: 15),
-                Text(AppLocalizations.of(context)!.loadingText)
-              ],
-            ),
-          )
+          LoadingWidget()
         ],
       ),
     );

@@ -46,6 +46,7 @@ dependencies:
   iconsax: ^0.0.8
   clean_calendar: ^1.1.0
   timeago: ^3.6.1
+  flutter_html: ^3.0.0-beta.2
 
 dev_dependencies:
   flutter_test:
