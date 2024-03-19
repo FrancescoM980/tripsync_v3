@@ -16,6 +16,7 @@ import 'package:tripsync_v3/ui/controller/homeController.dart';
 import 'package:tripsync_v3/ui/controller/walletController.dart';
 import 'package:tripsync_v3/ui/model/chat.dart';
 import 'package:tripsync_v3/ui/model/group.dart';
+import 'package:tripsync_v3/ui/screen/group/body_service_flight..dart';
 import 'package:tripsync_v3/ui/screen/home/section_home/body_all_chat_screen.dart';
 import 'package:tripsync_v3/ui/screen/home/section_home/body_calendar_screen.dart';
 import 'package:tripsync_v3/ui/screen/home/section_home/body_home_screen.dart';
@@ -30,6 +31,7 @@ class HomePageScreen extends StatelessWidget {
   WalletController walletController = Get.put(WalletController());
   ChatController chatController = Get.put(ChatController());
   RxBool isNewMessage = false.obs;
+
 
   void startAnimation() async {
     isNewMessage.value = true;
@@ -87,17 +89,12 @@ class HomePageScreen extends StatelessWidget {
           body: Column(
             children: [
               Divider(height: 0),
-              //CommonForm(
-              //  titleText: 'Partenza', 
-              //  icon: Icons.search, 
-              //  paddingHorizontal: 10,
-              //  onChanged: (p0) async {
-              //    //await controller.fetchDirectFlights('SUF', 'LIN', '2024-04', '2024-04', '19f7f10a6c60d2808c9d2ec422502d39');
-              //    await controller.fetchFlightSearchResults('1174');
-              //    //await controller.searchFlight(p0);
-              //    //await controller.searchAirport(p0);
-              //  },
-              //),
+              TextButton(
+                onPressed: () {
+                  Get.to(BodyServiceFlight());
+                }, 
+                child: Text('bottone')
+              ),
               Expanded(
                 child: bodySection(controller.currentIndex.value)
               )
