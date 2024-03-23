@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:timeago/timeago.dart';
 import 'package:tripsync_v3/ui/common_widget/loading_widget.dart';
@@ -10,6 +11,7 @@ import 'package:tripsync_v3/ui/controller/groupController.dart';
 import 'package:tripsync_v3/ui/controller/loginController.dart';
 import 'package:tripsync_v3/ui/screen/home/homepage.dart';
 import 'package:tripsync_v3/ui/screen/login/login_screen.dart';
+import 'package:tripsync_v3/ui/screen/travel_wizard/step1.dart';
 import 'package:tripsync_v3/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -87,6 +89,8 @@ class MyApp extends StatelessWidget {
                 }
                 else if (snapshot.data == 'aggiornare') {
                   return Text('ciao');
+                } else if (snapshot.data == 'tutorial') { 
+                  return StepTutorialWizard();
                 } else {
                   return LoginScreen();
                 }
@@ -103,10 +107,12 @@ class MyApp extends StatelessWidget {
   Future<String> autoLogin() async {
     setLocaleMessages('it', ItMessages());
     try {
+      
       String tmp = await loginController.autoLogin();
       GroupController groupController = Get.put(GroupController());
       await groupController.fetchMyGroups();
       //groupController.fetchMyGroups();
+
       return tmp;
     } catch (e) {
       return 'error';
@@ -136,7 +142,27 @@ class FirstScreen extends StatelessWidget {
       builder: (controller) {
         
         return Scaffold(
-          body: LoadingWidget()
+          backgroundColor: TripUtils.purple,
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/logo_icona.png'
+                  ),
+                  Image.asset(
+                    'assets/images/logo_scritta.png'
+                  )
+                ],
+              ),
+            ],
+          )
         );
       },
     );

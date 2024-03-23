@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:tripsync_v3/ui/model/airport.dart';
 import 'package:tripsync_v3/ui/model/flight_ticket.dart';
 class ServiceController extends GetxController {
+  RxBool isLoadingFlight = false.obs;
   Airport? andata;
   Airport? ritorno;
   TextEditingController andataDate = TextEditingController();
@@ -45,6 +46,7 @@ class ServiceController extends GetxController {
   }
 
   Future<void> searchFlights(String andata, String ritorno, String andataDate, String ritornoDate, int partecipants, String typeTicket) async {
+    isLoadingFlight.value = true;
     String marker = '527479';
     String apiToken = '19f7f10a6c60d2808c9d2ec422502d39';
     var url = Uri.parse('https://api.travelpayouts.com/v1/flight_search');
@@ -78,6 +80,7 @@ class ServiceController extends GetxController {
       print('Errore nella richiesta API: ${response.statusCode}');
       print(response.body);
     }
+    isLoadingFlight.value = false;
   }
 
 
@@ -120,6 +123,11 @@ class ServiceController extends GetxController {
       if (response.statusCode == 200) {
         
         var jsonResponse = jsonDecode(response.body);
+        if (jsonResponse == null || jsonResponse.isEmpty) {
+
+        } else {
+          
+        }
         for (var singleJson in jsonResponse) {
           print(singleJson['gates_info']);
           print(singleJson['filters_boundary']);

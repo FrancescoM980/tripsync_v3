@@ -8,6 +8,7 @@ import 'package:tripsync_v3/ui/common_widget/main_button.dart';
 import 'package:tripsync_v3/ui/common_widget/trip_popup.dart';
 import 'package:tripsync_v3/ui/controller/serviceController.dart';
 import 'package:tripsync_v3/ui/model/flight_ticket.dart';
+import 'package:tripsync_v3/ui/screen/group/flight_result_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BodyServiceFlight extends StatelessWidget {
@@ -31,53 +32,11 @@ class BodyServiceFlight extends StatelessWidget {
                 serviceController.numberPartecipants,
                 'Y'
               );
+              Get.to(FlightResultPage());
             }, 
             titleText: 'CERCA VOLO'
           ),
-          Obx( () => 
-            ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: serviceController.flightTickets.length,
-              itemBuilder: (context, i) {
-                FlightTicket ticket = serviceController.flightTickets[i];
-                return InkWell(
-                  onTap: () async {
-                    String url = await serviceController.fetchFlightTermsUrl(ticket.searchId, ticket.generalInfo.url);
-                    if (url != 'error') {
-                      await launchUrl(
-                        Uri.parse(
-                          url
-                        )
-                      );
-                    }
-                    
-                  },
-                  child: Card(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          title: Text('${ticket.generalInfo.price} ${ticket.generalInfo.currency}'),
-                          subtitle: Text(ticket.durationString),
-                        ),
-                        
-                        Column(
-                          children: List.generate(
-                            ticket.segments.length, 
-                            (index) => ListTile(
-                              title: Text('${ticket.segments[index].departure} ${ticket.segments[index].arrival}'),
-                              subtitle: Text('${ticket.segments[index].departureTime} - ${ticket.segments[index].arrivalTime}\n${ticket.segments[index].marketingCarrier}'),
-                            )
-                          )
-                        )
-                      ],
-                    ),
-                    
-                  ),
-                );
-              },
-            ),
-          )
+          
         ],
       )
     );

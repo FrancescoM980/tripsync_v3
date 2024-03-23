@@ -97,11 +97,17 @@ class LoginController extends GetxController {
     String? phone = prefs.getString('phone');
     String? password = prefs.getString('password');
     String? prefix = prefs.getString('prefix');
+    bool? hasTutorial = prefs.getBool('has_tutorial');
     if (phone != null && prefix != null && password != null) {
       success = await loginWithSupabase(phone, password, prefix);
     }
     isLoadingLogin.value = false;
-    return success ? 'success' : 'error';
+    if ( (hasTutorial == null || hasTutorial != true) && success) {
+      return 'tutorial';
+    } else {
+      return success ? 'success' : 'error';
+    }
+    
   }
 
   Future<String> checkLoginStatus() async {
