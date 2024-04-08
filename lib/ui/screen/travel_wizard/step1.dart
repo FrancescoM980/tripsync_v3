@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripsync_v3/ui/common_widget/main_button.dart';
+import 'package:tripsync_v3/ui/screen/home/homepage.dart';
 import 'package:tripsync_v3/utils.dart';
 
 class StepTutorialWizard extends StatefulWidget {
@@ -11,8 +14,10 @@ class StepTutorialWizard extends StatefulWidget {
 
 class _StepTutorialWizardState extends State<StepTutorialWizard> {
   final PageController _pageController = PageController();
+  double currentPage = 0; 
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -59,13 +64,26 @@ class _StepTutorialWizardState extends State<StepTutorialWizard> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40),
-            child: Row(
+            child: currentPage == 2.0
+              ? MainButton(
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('has_tutorial', true);
+                    Get.off(HomePageScreen());
+                    // Aggiungi la logica per saltare il tutorial
+                  }, 
+                  titleText: 'ENTRA E VIAGGIA'
+                )
+              : Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
                   child: Text('SKIP'),
-                  onTap: () {
+                  onTap: () async {
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('has_tutorial', true);
+                    Get.off(HomePageScreen());
                     // Aggiungi la logica per saltare il tutorial
                   },
                 ),
@@ -87,9 +105,11 @@ class _StepTutorialWizardState extends State<StepTutorialWizard> {
                   onTap: () {
                     setState(() {
                         _pageController.nextPage(
-                      duration: Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
-                    );
+                          duration: Duration(milliseconds: 400),
+                          curve: Curves.easeInOut,
+                        );
+                        currentPage = _pageController.page ?? 0;
+                        print(currentPage);
                     });
                     
                   },
@@ -125,7 +145,6 @@ class _StepTutorialWizardState extends State<StepTutorialWizard> {
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
-              color: TripUtils.grigioScuro,
             ),
             textAlign: TextAlign.center,
           ),
@@ -135,7 +154,7 @@ class _StepTutorialWizardState extends State<StepTutorialWizard> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w300,
-                color: TripUtils.grigioScuro,
+                color: Theme.of(context).primaryColor
               ),
               children: <TextSpan>[
                 TextSpan(
@@ -143,7 +162,6 @@ class _StepTutorialWizardState extends State<StepTutorialWizard> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
-                    color: TripUtils.grigioScuro,
                   ),
                 ),
                 TextSpan(
@@ -159,7 +177,6 @@ class _StepTutorialWizardState extends State<StepTutorialWizard> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
-                    color: TripUtils.grigioScuro,
                   ),
                 ),
               ],

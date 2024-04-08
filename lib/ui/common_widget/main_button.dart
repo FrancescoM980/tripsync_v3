@@ -25,11 +25,15 @@ class MainButton extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(paddingInterno),
           decoration: BoxDecoration(
-            color: TripUtils.arancione,
+            gradient: LinearGradient(
+              begin: Alignment.topCenter, // Inizio della sfumatura
+              end: Alignment.bottomCenter, // Fine della sfumatura
+              colors: [
+                TripUtils.arancione.withOpacity(0.6), // Colore iniziale
+                 TripUtils.arancione// Colore finale
+              ],
+            ),
             borderRadius: BorderRadius.circular(15),
-            border: Border.all(
-              color: TripUtils.arancione,
-            )
           ),
           width: MediaQuery.of(context).size.width/1,
           child: Text(

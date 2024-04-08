@@ -50,6 +50,7 @@ dependencies:
   crypto: ^3.0.3
   url_launcher: ^6.2.4
   currency_converter: ^2.0.0
+  select_form_field: ^2.2.0
 
 dev_dependencies:
   flutter_test:

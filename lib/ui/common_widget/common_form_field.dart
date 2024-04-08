@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripsync_v3/utils.dart';
 
 class CommonForm extends StatelessWidget {
   String titleText;
@@ -40,7 +41,7 @@ class CommonForm extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 15),
         decoration: BoxDecoration(
-          border: Border.all(width: 3, color: Theme.of(context).dividerColor),
+          color: Theme.of(context).cardColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(15)
         ),
         child: TextFormField(

@@ -1,4 +1,6 @@
 {
+    "loginTitle": "Accedi ora",
+    "loginDescription": "Inserisci le tue credenziali per continuare",
     "loadingText": "Attendi il caricamento",
     "errorPhoneValidator": "Seleziona un numero di telefono valido",
     "phoneForm": "Numero di telefono",
@@ -11,7 +13,7 @@
     "partecipanti": "partecipanti",
     "textTheme": "Tema scuro",
     "textGeneralNotification": "Notifiche generali",
-    "textSendError": "manda segnalazione",
+    "textSendError": "Manda segnalazione",
     "textPrivacyPolicy": "Privacy Policy",
     "textTermsAndCondition": "Termini & Condizioni",
     "textLogout": "LOGOUT",

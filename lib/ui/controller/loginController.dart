@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tripsync_v3/ui/model/user_model.dart';
 import 'package:tripsync_v3/ui/screen/home/homepage.dart';
+import 'package:tripsync_v3/ui/screen/travel_wizard/step1.dart';
 import 'package:tripsync_v3/utils.dart';
 
 class LoginController extends GetxController {
@@ -61,23 +62,28 @@ class LoginController extends GetxController {
     isLoadingLogin.value = true;
     bool success = false;
     try {
-          success = await loginWithSupabase(phone, password, prefix);
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.clear();
-          await prefs.setString('phone', phone);
-          await prefs.setString('password', password);
-          await prefs.setString('prefix', prefix);
-          isLoadingLogin.value = false;
-          if (success) {
-            Get.off(HomePageScreen());
-          } else {
-            Get.dialog(
-              AlertDialog(
-                title: Text('Ops, qualcosa è andato stuart'),
-              )
-            );
-          }
-          return success;
+      success = await loginWithSupabase(phone, password, prefix);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      await prefs.setString('phone', phone);
+      await prefs.setString('password', password);
+      await prefs.setString('prefix', prefix);
+      bool? hasTutorial = prefs.getBool('has_tutorial');
+      isLoadingLogin.value = false;
+      if ( (hasTutorial == null || hasTutorial != true) && success) {
+        Get.off(
+          StepTutorialWizard()
+        );
+      } else if (success) {
+        Get.off(HomePageScreen());
+      } else {
+        Get.dialog(
+          AlertDialog(
+            title: Text('Ops, qualcosa è andato stuart'),
+          )
+        );
+      }
+      return success;
     } catch (e) {
       Get.dialog(
         AlertDialog(

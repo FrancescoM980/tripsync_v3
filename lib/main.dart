@@ -56,7 +56,6 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
             future: autoLogin(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              print(snapshot.data);
               if (snapshot.hasData) {
                 if (snapshot.data == 'success') {
                   return HomePageScreen();
@@ -112,7 +111,6 @@ class MyApp extends StatelessWidget {
       GroupController groupController = Get.put(GroupController());
       await groupController.fetchMyGroups();
       //groupController.fetchMyGroups();
-
       return tmp;
     } catch (e) {
       return 'error';

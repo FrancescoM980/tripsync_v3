@@ -7,6 +7,7 @@ import 'package:tripsync_v3/ui/common_widget/trip_scaffold.dart';
 import 'package:tripsync_v3/ui/common_widget/trip_scaffold_without_appbar.dart';
 import 'package:tripsync_v3/ui/controller/loginController.dart';
 import 'package:tripsync_v3/ui/screen/home/homepage.dart';
+import 'package:tripsync_v3/ui/screen/login/register.dart';
 import 'package:tripsync_v3/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -38,8 +39,11 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     navigators = <CountrySelectorNavigator>[
-      const CountrySelectorNavigator.draggableBottomSheet(),
-      const CountrySelectorNavigator.modalBottomSheet(),
+      CountrySelectorNavigator.draggableBottomSheet(
+        searchInputDecoration: InputDecoration()
+      ),
+      const CountrySelectorNavigator.modalBottomSheet(
+      ),
       const CountrySelectorNavigator.dialog(),
       const CountrySelectorNavigator.searchDelegate(),
       const CountrySelectorNavigator.bottomSheet(),
@@ -51,7 +55,7 @@ class LoginScreen extends StatelessWidget {
         showSearchInput: true,
       ),
     ];
-    selectorNavigator = navigators.first;
+    selectorNavigator = navigators[1];
 
     return GetBuilder<LoginController>(
       init: LoginController(),
@@ -65,21 +69,53 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.all(25.0),
             child: ListView(
               children: [
-                SizedBox(
-                  height: 200,
-                  child: Image.asset('assets/images/new_logo2.png')
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width*0.2,
+                      child: Image.asset(
+                        'assets/images/logo_icona.png',
+                        color: TripUtils.arancione
+                      )
+                    ),
+                    SizedBox(
+                      
+                      width: MediaQuery.of(context).size.width*0.5,
+                      child: Image.asset(
+                        'assets/images/logo_scritta.png',
+                        color: TripUtils.arancione
+                      )
+                    ),
+                  ],
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 30),
+                Text(
+                  AppLocalizations.of(context)!.loginTitle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  AppLocalizations.of(context)!.loginDescription,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    fontSize: 16
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 30),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    border: Border.all(
-                      width: 3,
-                      color: Theme.of(context).dividerColor
-                    )
+                    color: Theme.of(context).cardColor.withOpacity(0.2),
                   ),
                   child: PhoneInput(
+                    
                     showArrow: _showArrow,
                     shouldFormat: false,
                     onChanged: (value) {
@@ -98,7 +134,7 @@ class LoginScreen extends StatelessWidget {
                     controller: telefonoController,
                     decoration: InputDecoration(
                       labelText: AppLocalizations.of(context)!.phoneForm,
-                      border: InputBorder.none
+                      border: InputBorder.none,
                     ),
                     countrySelectorNavigator: selectorNavigator,
                     defaultCountry: IsoCode.IT,
@@ -132,18 +168,11 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      '${AppLocalizations.of(context)!.rememberPassword} ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w200,
-                        fontSize: 13
-                      )
-                    ),
-                    Text(
                       AppLocalizations.of(context)!.clickHere,
                       style: TextStyle(
-                        decoration: TextDecoration.underline,
                         fontWeight: FontWeight.bold,
-                        fontSize: 13
+                        fontSize: 14,
+                        color: TripUtils.arancione
                       )
                     )
                   ],
@@ -174,12 +203,18 @@ class LoginScreen extends StatelessWidget {
                         fontWeight: FontWeight.w200
                       )
                     ),
-                    Text(
-                      AppLocalizations.of(context)!.register,
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold
-                      )
+                    InkWell(
+                      onTap: () {
+                        Get.to(RegisterPage());
+                      },
+                      child: Text(
+                        AppLocalizations.of(context)!.register,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                          color: TripUtils.arancione
+                        )
+                      ),
                     )
                   ],
                 ),

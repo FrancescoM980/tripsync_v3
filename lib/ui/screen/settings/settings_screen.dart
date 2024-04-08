@@ -9,6 +9,7 @@ import 'package:tripsync_v3/ui/controller/loginController.dart';
 import 'package:tripsync_v3/ui/screen/login/login_screen.dart';
 import 'package:tripsync_v3/ui/screen/settings/general_notification_screen.dart';
 import 'package:tripsync_v3/ui/screen/settings/privacy_policy.dart';
+import 'package:tripsync_v3/ui/screen/settings/send_report.dart';
 import 'package:tripsync_v3/ui/screen/settings/termini_condizioni.dart';
 import 'package:tripsync_v3/utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -87,6 +88,9 @@ class SettingScreen extends StatelessWidget {
               Iconsax.danger,
               color: TripUtils.arancione
             ),
+            onTap: () {
+              Get.to(SendReportPage());
+            },
           ),
           ListTile(
             title: Text(AppLocalizations.of(context)!.textPrivacyPolicy),
